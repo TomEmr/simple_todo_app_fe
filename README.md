@@ -20,27 +20,19 @@ This is the frontend component of the Todo App, a simple yet powerful tool desig
 
 ### 1. Clone the repository
 
-\`\`\`bash
 git clone https://github.com/TomEmr/todo-app-frontend.git
-\`\`\`
 
 ### 2. Navigate to the project directory
 
-\`\`\`bash
 cd todo-app-frontend
-\`\`\`
 
 ### 3. Install dependencies
 
-\`\`\`bash
 npm install
-\`\`\`
 
 ### 4. Start the development server
 
-\`\`\`bash
 npm start
-\`\`\`
 
 ## Contributing
 
