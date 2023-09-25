@@ -19,7 +19,7 @@ const Register = () => {
         const url = `${process.env.REACT_APP_API_BASE_URL}/register`;
 
         try {
-            const response = await axios.post(url, formData);
+            await axios.post(url, formData);
             alert('Registration successful');
             setFormData({
                 userName: '',
@@ -34,7 +34,7 @@ const Register = () => {
 
     return (
         <div>
-            <h1>Register Page</h1>
+            <h2>Register Page</h2>
             <form onSubmit={handleSubmit}>
                 <input type="text" name="userName" value={formData.userName} onChange={handleChange} placeholder="Username" />
                 <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
