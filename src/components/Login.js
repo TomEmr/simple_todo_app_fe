@@ -21,6 +21,8 @@ const Login = () => {
 
         try {
             const response = await axios.post(url, formData, { withCredentials: true });
+            const authenticationResponse = response.data;
+            localStorage.setItem('username', authenticationResponse.userName);
             navigate('/main');
         } catch (error) {
             const errorMsg = error.response?.data?.message || 'Error logging in';
@@ -30,7 +32,8 @@ const Login = () => {
 
     return (
         <div>
-            <h1>Login Page</h1>
+            <h1>TomEmr Simple to-do app</h1>
+            <h2>Login Page</h2>
             <form onSubmit={handleSubmit}>
                 <input type="text" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
                 <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Password" />
