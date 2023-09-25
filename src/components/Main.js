@@ -11,7 +11,6 @@ const Main = () => {
     const [username, setUsername] = useState(localStorage.getItem('username') || 'Guest');
 
     useEffect(() => {
-        // Fetch the username from local storage and set it
         const storedUsername = localStorage.getItem('username');
         if (storedUsername) {
             setUsername(storedUsername);
