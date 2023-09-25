@@ -1,13 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import TodoList from './TodoList';
+import axios from "axios";
 
 const Main = () => {
     const navigate = useNavigate();
     const [todos, setTodos] = useState([]);
     const [title, setTodo] = useState('');
     const [filter, setFilter] = useState('all');
+    const [username, setUsername] = useState(localStorage.getItem('username') || 'Guest');
+
+    useEffect(() => {
+        // Fetch the username from local storage and set it
+        const storedUsername = localStorage.getItem('username');
+        if (storedUsername) {
+            setUsername(storedUsername);
+        }
+    }, []);
 
     const fetchTodos = async (filter = 'all') => {
         let todosUrl = `${process.env.REACT_APP_API_TASK_URL}`;
@@ -72,7 +81,7 @@ const Main = () => {
 
     return (
         <div>
-            <h1>Welcome to your Todo App</h1>
+            <h1>Welcome {username} to your Todo App</h1>
             <button onClick={handleLogout} style={{float: 'right'}}>Logout</button>
             <form onSubmit={handleFormSubmit}>
                 <input
@@ -101,6 +110,6 @@ const Main = () => {
             <button onClick={handleDeleteAllCompleted}>Remove All Completed</button>
         </div>
     );
-};
+}
 
 export default Main;
