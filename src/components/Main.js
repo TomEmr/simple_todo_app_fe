@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import TodoList from './TodoList';
-import axios from "axios";
+import useApiCall from "../hooks/useApiCall.ts";
 
 const Main = () => {
     const navigate = useNavigate();
@@ -9,6 +9,7 @@ const Main = () => {
     const [title, setTodo] = useState('');
     const [filter, setFilter] = useState('all');
     const [username, setUsername] = useState(localStorage.getItem('username') || 'Guest');
+    const { makeApiCall } = useApiCall();
 
     useEffect(() => {
         const storedUsername = localStorage.getItem('username');
@@ -22,13 +23,11 @@ const Main = () => {
         if (filter !== 'all') {
             todosUrl += `?status=${filter}`;
         }
-
-        try {
-            const response = await axios.get(todosUrl, {withCredentials: true});
-            setTodos(response.data);
-        } catch (error) {
-            const errorMsg = error.response?.data?.message || 'Error fetching todos';
-            alert(errorMsg);
+        const [data, error] = await makeApiCall({ url: todosUrl, method: 'GET' });
+        if (data) {
+            setTodos(data);
+        } else if (error) {
+            alert(error);
         }
     };
 
@@ -41,15 +40,18 @@ const Main = () => {
 
     const handleAddTodo = async () => {
         const todosUrl = `${process.env.REACT_APP_API_TASK_URL}`;
-        try {
-            const response = await axios.post(todosUrl, {title}, {withCredentials: true});
-            setTodos([...todos, response.data]);
+        const [data, error] = await makeApiCall({
+            url: todosUrl,
+            method: 'POST',
+            data: { title },
+        });
+        if (data) {
+            setTodos([...todos, data]);
             setTodo('');
-        } catch (error) {
-            const errorMsg = error.response?.data?.message || 'Error adding todo';
-            alert(errorMsg);
+        } else if (error) {
+            alert(error);
         }
-    }
+    };
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -58,23 +60,28 @@ const Main = () => {
 
     const handleDeleteAllCompleted = async () => {
         const deleteAllCompletedUrl = `${process.env.REACT_APP_API_TASK_URL}`;
-        try {
-            await axios.delete(deleteAllCompletedUrl, {withCredentials: true});
+        const [data, error] = await makeApiCall({
+            url: deleteAllCompletedUrl,
+            method: 'DELETE',
+        });
+        if (data) {
             await fetchTodos();
-        } catch (error) {
-            const errorMsg = error.response?.data?.message || 'Error deleting all completed tasks';
-            alert(errorMsg);
+        } else if (error) {
+            alert(error);
         }
     };
 
     const handleLogout = async () => {
         const logoutUrl = `${process.env.REACT_APP_API_BASE_URL}/logout`;
-        try {
-            await axios.get(logoutUrl, {withCredentials: true});
+        const [data, error] = await makeApiCall({
+            url: logoutUrl,
+            method: 'GET',
+        });
+        if (data) {
+            localStorage.removeItem('username');
             navigate('/');
-        } catch (error) {
-            const errorMsg = error.response?.data?.message || 'Error logging out';
-            alert(errorMsg);
+        } else if (error) {
+            alert(error);
         }
     };
 

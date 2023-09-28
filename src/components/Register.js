@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
+import useApiCall from '../hooks/useApiCall.ts';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -8,6 +8,7 @@ const Register = () => {
         password: '',
         email: ''
     });
+    const { makeApiCall } = useApiCall();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -16,19 +17,22 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = `${process.env.REACT_APP_API_BASE_URL}/register`;
+        const registerUrl = `${process.env.REACT_APP_API_BASE_URL}/register`;
 
-        try {
-            await axios.post(url, formData);
+        const [data, error] = await makeApiCall({
+            url: registerUrl,
+            method: 'POST',
+            data: formData,
+        });
+        if (data) {
             alert('Registration successful');
             setFormData({
                 userName: '',
                 password: '',
                 email: ''
             });
-        } catch (error) {
-            const errorMsg = error.response?.data?.message || 'Error registering';
-            alert(errorMsg);
+        } else if (error) {
+            alert(error);
         }
     };
 
