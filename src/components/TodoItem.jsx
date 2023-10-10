@@ -11,6 +11,15 @@ const TodoItem = ({todo, fetchTodos}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [newTitle, setNewTitle] = useState(todo.title);
     const {makeApiCall} = useApiCall();
+    const iconStyle = {
+        margin: '0 10px',
+        color: '#0077cc'  // Default color
+    };
+
+    const editIconStyle = {...iconStyle, color: '#f39c12'};  // Orange
+    const completeIconStyle = {...iconStyle, color: '#27ae60'};  // Green
+    const deleteIconStyle = {...iconStyle, color: '#c0392b'};  // Red
+
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -75,25 +84,25 @@ const TodoItem = ({todo, fetchTodos}) => {
                         value={newTitle}
                         onChange={(e) => setNewTitle(e.target.value)}
                     />
-                    <DoneIcon type="submit" onClick={handleSubmit} cursor="pointer"/>
+                    <DoneIcon style={completeIconStyle} type="submit" onClick={handleSubmit} cursor="pointer"/>
                 </form>
             ) : (
                 <>
                     {todo.title}
                     <Tooltip title="Click here to change the title" arrow>
-                        <EditIcon onClick={handleEditClick} cursor="pointer"/>
+                        <EditIcon style={editIconStyle} onClick={handleEditClick} cursor="pointer"/>
                     </Tooltip>
                 </>
             )}
             <Tooltip title={todo.completed ? "Click here for unfinished task" : "Click here to finish the task"} arrow>
                 {todo.completed ? (
-                    <CloseIcon onClick={handleComplete} cursor="pointer" />
+                    <CloseIcon style={deleteIconStyle} onClick={handleComplete} cursor="pointer" />
                 ) : (
-                    <TaskIcon onClick={handleComplete} cursor="pointer" />
+                    <TaskIcon style={completeIconStyle} onClick={handleComplete} cursor="pointer" />
                 )}
             </Tooltip>
             <Tooltip title="Click here to delete the task" arrow>
-                <DeleteIcon onClick={handleDelete} cursor="pointer"/>
+                <DeleteIcon style={deleteIconStyle} onClick={handleDelete} cursor="pointer"/>
             </Tooltip>
         </div>
     );

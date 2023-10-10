@@ -34,7 +34,7 @@ const Login = () => {
 
         return (
             <div>
-                <h1>TomEmr Simple to-do app</h1>
+                <h1>Easy to-do app</h1>
                 <h2>Login Page</h2>
                 <form onSubmit={handleSubmit}>
                     <input type="text" name="email" value={formData.email} onChange={handleChange} placeholder="Email"/>

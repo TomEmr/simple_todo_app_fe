@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import TodoList from './TodoList';
 import useApiCall from "../hooks/useApiCall.ts";
@@ -18,7 +18,7 @@ const Main = () => {
         }
     }, []);
 
-    const fetchTodos = async (filter = 'all') => {
+    const fetchTodos = useCallback(async (filter = 'all') => {
         let todosUrl = `${process.env.REACT_APP_API_TASK_URL}`;
         if (filter !== 'all') {
             todosUrl += `?status=${filter}`;
@@ -29,14 +29,13 @@ const Main = () => {
         } else if (error) {
             alert(error);
         }
-    };
+    }, [makeApiCall]);
 
     useEffect(() => {
-        // Invoke the async function here
         (async () => {
             await fetchTodos(filter);
         })();
-    }, [filter]);
+    }, [filter, fetchTodos]);
 
     const handleAddTodo = async () => {
         const todosUrl = `${process.env.REACT_APP_API_TASK_URL}`;
@@ -88,7 +87,6 @@ const Main = () => {
     return (
         <div>
             <h1>Welcome {username} to your Todo App</h1>
-            <button onClick={handleLogout} style={{float: 'right'}}>Logout</button>
             <form onSubmit={handleFormSubmit}>
                 <input
                     type="text"
@@ -114,6 +112,7 @@ const Main = () => {
                 </button>
             </div>
             <button onClick={handleDeleteAllCompleted}>Remove All Completed</button>
+            <button className="logout-button" onClick={handleLogout}>Logout</button>
         </div>
     );
 }
